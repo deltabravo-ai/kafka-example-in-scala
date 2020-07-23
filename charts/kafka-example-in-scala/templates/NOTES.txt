@@ -1,0 +1,10 @@
+
+You should now have a Kafka Producer and Consumer talking in Kubernetes!
+
+Keep an eye on them by tailing their logs:
+
+kubectl logs -n {{.Release.Namespace}} -f -l kafkaAppRole=consumer
+
+and
+
+kubectl logs -n {{.Release.Namespace}} -f -l kafkaAppRole=producer

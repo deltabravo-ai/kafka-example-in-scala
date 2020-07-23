@@ -23,5 +23,17 @@ java -cp kafka-example-in-scala.jar com.colobu.kafka.ScalaProducerExample 10000 
 In a separate terminal, attach and run the consumer like so:
 
 ```
-java -cp kafka-example-in-scala.jar com.colobu.kafka.ScalaConsumerExample kafka.default.svc.cluster.local:9092 group1 test_topic 10 0
+java -cp kafka-example-in-scala.jar com.colobu.kafka.ScalaConsumerExample kafka.default.svc.cluster.local:9092 group1 test_topic
+```
+
+Install via helm chart:
+
+```
+helm install my-app-name ./charts/kafka-example-in-scala
+```
+
+When you're done:
+
+```
+helm delete my-app-name
 ```

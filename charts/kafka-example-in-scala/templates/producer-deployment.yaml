@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "kafka-example-in-scala.fullname" . }}-producer
+  labels:
+    {{- include "kafka-example-in-scala.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "kafka-example-in-scala.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "kafka-example-in-scala.selectorLabels" . | nindent 8 }}
+        kafkaAppRole: producer
+    spec:
+      containers:
+        - name: {{ .Chart.Name }}-producer
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          command:
+            # java -cp kafka-example-in-scala.jar com.colobu.kafka.ScalaProducerExample 10000 test_topic kafka:9092
+            - java
+            - -cp
+            - kafka-example-in-scala.jar
+            - com.colobu.kafka.ScalaProducerExample
+            - "{{.Values.kafka.numberEventsToPublish}}"
+            - "{{.Values.kafka.topic}}"
+            - "{{.Values.kafka.serviceUrl}}"
+          livenessProbe:
+            exec:
+              command:
+                - /bin/ps
+                - -ef
+                - "|"
+                - grep
+                - "'[S]calaProducerExample'"
+          readinessProbe:
+            exec:
+              command:
+                - /bin/ps
+                - -ef
+                - "|"
+                - grep
+                - "'[S]calaProducerExample'"
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
