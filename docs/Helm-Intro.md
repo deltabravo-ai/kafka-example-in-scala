@@ -18,7 +18,7 @@ choco install kubernetes-helm
 - [Download the Windows binary for Helm from the latest stable release](https://github.com/helm/helm/releases/tag/v3.2.4)
 
 
-**2) Add the [Kafka helm repo to your local Helm](https://github.com/helm/charts/tree/master/incubator/kafka)**
+**2) Add the [Kafka repo](https://github.com/helm/charts/tree/master/incubator/kafka)**
 
 ```
 helm repo add incubator http://storage.googleapis.com/kubernetes-charts-incubator
@@ -122,4 +122,5 @@ The main files are:
 - `NOTES.txt` - Contains output that will be emitted at the conclusion of a helm install. Can contain dynamic data
 
 Within the deployment.yaml we will specify the URL for the container image that was pushed to our registry as well as the command to run the application for our application. The deployment will also need to specify liveness and readiness probes so that kubernetes can tell if the application is up and running.
+
 
