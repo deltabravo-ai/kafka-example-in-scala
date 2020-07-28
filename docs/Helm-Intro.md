@@ -46,7 +46,6 @@ git clone https://github.com/deltabravo-ai/kafka-example-in-scala.git
 
 ```
 cd kafka-example-in-scala
-git checkout -t origin/containerize
 helm install --create-namespace --namespace example-app \
   --set kafka.serviceUrl=kafka.kafka.svc.cluster.local:9092 \
   kafka-app charts/kafka-example-in-scala/
