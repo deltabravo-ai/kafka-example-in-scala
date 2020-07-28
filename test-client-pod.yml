@@ -1,0 +1,14 @@
+# kubectl exec -it testclient -- sh
+apiVersion: v1
+kind: Pod
+metadata:
+  name: testclient
+  namespace: default
+spec:
+  containers:
+  - name: kafka
+    image: adamferguson/dbai-kafkaexampleinscala:latest
+    command:
+    - sh
+    - -c
+    - "exec tail -f /dev/null"

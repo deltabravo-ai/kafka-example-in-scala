@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "kafka-example-in-scala.fullname" . }}-consumer
+  labels:
+    {{- include "kafka-example-in-scala.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "kafka-example-in-scala.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "kafka-example-in-scala.selectorLabels" . | nindent 8 }}
+        kafkaAppRole: consumer
+    spec:
+      containers:
+        - name: {{ .Chart.Name }}-consumer
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          command:
+            # java -cp kafka-example-in-scala.jar com.colobu.kafka.ScalaConsumerExample kafka.default.svc.cluster.local:9092 group1 test_topic
+            - java
+            - -cp
+            - kafka-example-in-scala.jar
+            - com.colobu.kafka.ScalaConsumerExample
+            - "{{.Values.kafka.serviceUrl}}"
+            - "{{.Values.kafka.consumerGroupId}}"
+            - "{{.Values.kafka.topic}}"
+          livenessProbe:
+            exec:
+              command:
+                - /bin/ps
+                - -ef
+                - "|"
+                - grep
+                - "'[S]calaConsumerExample'"
+          readinessProbe:
+            exec:
+              command:
+                - /bin/ps
+                - -ef
+                - "|"
+                - grep
+                - "'[S]calaConsumerExample'"
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
